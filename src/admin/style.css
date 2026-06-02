@@ -1,0 +1,219 @@
+/* Skip Tailwind's base/preflight layer — only load theme + utilities.
+   The base reset (box-sizing on *, margin:0 on h1, etc.) conflicts with
+   the WordPress admin stylesheet, so we exclude it and rely on the
+   widget's scoped styles + utility classes only. */
+@import "tailwindcss/theme.css" prefix(zn);
+@import "tailwindcss/utilities.css" prefix(zn);
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+:root {
+	--background: oklch(1 0 0);
+	--foreground: oklch(0.145 0 0);
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.145 0 0);
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.145 0 0);
+	--primary: #155eef;
+	--primary-50: #eff4ff;
+	--primary-icon: #155eef;
+	--primary-icon-foreground: oklch(0.97 0 0);
+	--primary-foreground: oklch(0.985 0 0);
+	--secondary: oklch(0.97 0 0);
+	--secondary-foreground: oklch(0.205 0 0);
+	--muted: oklch(0.97 0 0);
+	--muted-foreground: #4d5761;
+	--accent: oklch(0.97 0 0);
+	--accent-foreground: oklch(0.205 0 0);
+	--destructive: oklch(0.577 0.245 27.325);
+	--destructive-foreground: oklch(0.577 0.245 27.325);
+	--border: oklch(0.922 0 0);
+	--input: oklch(0.922 0 0);
+	--ring: oklch(0.708 0 0);
+	--chart-1: oklch(0.646 0.222 41.116);
+	--chart-2: oklch(0.6 0.118 184.704);
+	--chart-3: oklch(0.398 0.07 227.392);
+	--chart-4: oklch(0.828 0.189 84.429);
+	--chart-5: oklch(0.769 0.188 70.08);
+	--radius: 0.625rem;
+	--sidebar: oklch(0.985 0 0);
+	--sidebar-foreground: oklch(0.145 0 0);
+	--sidebar-primary: oklch(0.205 0 0);
+	--sidebar-primary-foreground: oklch(0.985 0 0);
+	--sidebar-accent: oklch(0.97 0 0);
+	--sidebar-accent-foreground: oklch(0.205 0 0);
+	--sidebar-border: oklch(0.922 0 0);
+	--sidebar-ring: oklch(0.708 0 0);
+	--success: #0ca678;
+	--warning: #d9480f;
+	--warning-light: #ffe8cc;
+	--default-800: #111927;
+	--default-600: #4d5761;
+	--default-700: #384250;
+	--default-400: #9da4ae;
+	--default-200: #e5e7eb;
+	--default-100: #f3f4f6;
+	--default-50: #f9fafb;
+	--default: #4d5761;
+	--font-sans: Inter, ui-sans-serif, sans-serif, system-ui;
+}
+
+@theme inline {
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-50: var(--primary-50);
+	--color-primary-icon: var(--primary-icon);
+	--color-primary-icon-foreground: var(--primary-icon-foreground);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-border: var(--border);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-success: var(--success);
+	--color-default-800: var(--default-800);
+	--color-default-600: var(--default-600);
+	--color-default-700: var(--default-700);
+	--color-default-400: var(--default-400);
+	--color-default-200: var(--default-200);
+	--color-default-100: var(--default-100);
+	--color-default-50: var(--default-50);
+	--color-default: var(--default);
+	--color-warning: var(--warning);
+	--color-warning-light: var(--warning-light);
+	--font-sans: var(--font-sans);
+}
+
+@layer base {
+	* {
+		@apply zn:border-border zn:outline-ring/50;
+	}
+
+	body {
+		@apply zn:text-foreground;
+	}
+}
+pre code {
+	word-break: break-word;
+	white-space: pre-wrap;
+}
+/* Scoped Tailwind preflight — applies ONLY inside our plugin's admin root.
+   This replaces global preflight which conflicts with WP admin styles. */
+#zone7-accessibility {
+	* {
+		box-sizing: border-box;
+	}
+	margin-left: -20px;
+
+	/* Bold */
+	b,
+	strong {
+		font-weight: bolder;
+	}
+
+	/* Lists */
+	ol,
+	ul,
+	menu {
+		list-style: none;
+	}
+
+	/* Media */
+	img,
+	svg,
+	video,
+	canvas,
+	audio,
+	iframe,
+	embed,
+	object {
+		display: block;
+		vertical-align: middle;
+	}
+	img,
+	video {
+		max-width: 100%;
+		height: auto;
+	}
+
+	/* Form elements */
+	button,
+	input,
+	select,
+	optgroup,
+	textarea,
+	::file-selector-button {
+		font: inherit;
+		font-feature-settings: inherit;
+		font-variation-settings: inherit;
+		letter-spacing: inherit;
+		color: inherit;
+		border-radius: 0;
+		background-color: transparent;
+		opacity: 1;
+	}
+
+	/* Tables */
+	table {
+		text-indent: 0;
+		border-color: inherit;
+		border-collapse: collapse;
+	}
+
+	/* Textarea */
+	textarea {
+		resize: vertical;
+	}
+
+	/* Placeholder */
+	::placeholder {
+		opacity: 1;
+	}
+
+	/* Button appearance */
+	button,
+	input:where([type="button"], [type="reset"], [type="submit"]) {
+		appearance: button;
+	}
+
+	/* Hidden */
+	[hidden]:where(:not([hidden="until-found"])) {
+		display: none !important;
+	}
+	input[type="radio"],
+	input[type="checkbox"] {
+		appearance: none;
+	}
+}
+
+.et_pb_image_wrap img {
+	display: inline;
+}
