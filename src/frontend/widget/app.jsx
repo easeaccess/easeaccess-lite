@@ -46,29 +46,38 @@ import WidgetFooter from "./components/widget-footer";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const hydrateFeaturesForWidget = (features = []) => {
+	// Lite: build a strict allowlist of feature keys + group titles that this
+	// build supports. Anything outside this allowlist (e.g. Pro features left
+	// in the saved option from a previous Pro install) is silently dropped.
 	const defaultsByKey = new Map();
+	const liteKeys = new Set();
+	const liteTitles = new Set();
 	DEFAULT_FEATURES.forEach((group) => {
+		liteTitles.add(group.title);
 		(group.settings || []).forEach((setting) => {
 			defaultsByKey.set(setting.key, setting);
+			liteKeys.add(setting.key);
 		});
 	});
 
 	const sourceFeatures =
 		Array.isArray(features) && features.length ? features : DEFAULT_FEATURES;
 
-	// Build a set of keys present in the saved/source list so we can detect
-	// new default features that were added after the user last saved settings
-	// (e.g. landmarkHotkeys, voiceCommands shipped in a later plugin release).
+	// Restrict the saved source to groups + settings that exist in Lite.
+	const filteredSource = sourceFeatures
+		.filter((group) => liteTitles.has(group.title))
+		.map((group) => ({
+			...group,
+			settings: (group.settings || []).filter((s) => liteKeys.has(s.key)),
+		}));
+
 	const presentKeys = new Set();
-	sourceFeatures.forEach((group) => {
+	filteredSource.forEach((group) => {
 		(group.settings || []).forEach((s) => presentKeys.add(s.key));
 	});
 
-	// Merge each source group with any default settings that share its title
-	// but are missing from the saved data. Then append any default groups
-	// that are entirely absent from the source.
-	const sourceTitles = new Set(sourceFeatures.map((g) => g.title));
-	const merged = sourceFeatures.map((group) => {
+	const sourceTitles = new Set(filteredSource.map((g) => g.title));
+	const merged = filteredSource.map((group) => {
 		const defaultGroup =
 			DEFAULT_FEATURES.find((g) => g.title === group.title) || {};
 		const missing = (defaultGroup.settings || []).filter(
