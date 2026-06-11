@@ -1,0 +1,31 @@
+# A list of files NOT to include in the distributed plugin zip.
+# Everything else (PHP, build/, src/, languages/, build tooling) IS included.
+
+# VCS / CI
+/.git
+/.github
+/.gitignore
+/.gitattributes
+
+# Dependencies & caches
+/node_modules
+/.eslintcache
+/.npm
+
+# Editor / OS
+/.vscode
+/.idea
+.DS_Store
+Thumbs.db
+
+# This config file itself
+/.distignore
+
+# Lockfile (not needed by end users)
+/package-lock.json
+
+# Previously generated dist zips (don't nest a zip inside the zip)
+*.zip
+
+# Source maps — the uncompiled source is already shipped in /src
+*.map

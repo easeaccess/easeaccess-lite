@@ -10,7 +10,9 @@
 		"start": "wp-scripts start",
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
-		"plugin-zip": "wp-scripts plugin-zip"
+		"plugin-zip": "wp-scripts plugin-zip",
+		"submit-zip": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-plugin.ps1",
+		"package": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-plugin.ps1"
 	},
 	"devDependencies": {
 		"@babel/preset-react": "^7.27.1",
