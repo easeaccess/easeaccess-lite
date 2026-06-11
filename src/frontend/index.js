@@ -7,8 +7,7 @@ import WidgetApp from "./widget-wrapper";
 // to the WP REST API without the @wordpress/api-fetch global helpers.
 const easeAccessRestUrl =
 	(typeof window !== "undefined" &&
-		(window.EaseAccessLiteSettings?.rest_url ||
-			window.ZN7Settings?.rest_url)) ||
+		window.EaseAccessLiteSettings?.rest_url) ||
 	"";
 if (easeAccessRestUrl) {
 	apiFetch.use(apiFetch.createRootURLMiddleware(easeAccessRestUrl));

@@ -87,9 +87,7 @@ class Library {
 		register_rest_route( self::NAMESPACE, '/statement', array(
 			'methods'             => array( 'GET', 'POST', 'DELETE' ),
 			'callback'            => array( $this, 'handle_statement' ),
-			'permission_callback' => function () {
-				return current_user_can( 'edit_pages' );
-			},
+			'permission_callback' => array( $this, 'statement_permission_check' ),
 		) );
 
 		register_rest_route( self::NAMESPACE, '/statement/download', array(
@@ -232,6 +230,24 @@ class Library {
 	/* ============================================================ */
 	/* Statement                                                     */
 	/* ============================================================ */
+
+	/**
+	 * Capability check for the /statement endpoint.
+	 *
+	 * GET only reads, but POST publishes a page and DELETE permanently
+	 * removes a published page, so each method requires the matching
+	 * publish/delete capability rather than a blanket edit_pages check.
+	 */
+	public function statement_permission_check( $request ) {
+		switch ( $request->get_method() ) {
+			case 'POST':
+				return current_user_can( 'publish_pages' );
+			case 'DELETE':
+				return current_user_can( 'delete_published_pages' );
+			default:
+				return current_user_can( 'edit_pages' );
+		}
+	}
 
 	public function handle_statement( $request ) {
 		if ( in_array( $request->get_method(), array( 'POST', 'DELETE' ), true ) ) {

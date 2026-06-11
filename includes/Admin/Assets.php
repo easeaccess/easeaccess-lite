@@ -49,7 +49,5 @@ class Assets {
 			'rest_url' => rest_url(),
 		);
 		wp_localize_script( 'easeaccess-lite-admin-script', 'EaseAccessLiteAdmin', $admin_payload );
-		// Back-compat alias for JS that still reads the old name.
-		wp_localize_script( 'easeaccess-lite-admin-script', 'zn7Settings', $admin_payload );
 	}
 }

@@ -1,7 +1,6 @@
 /**
- * LITE feature toggle hook — only free features.
+ * Feature toggle hook for EaseAccess Lite — wires up the free features only.
  * No premium feature handlers or imports.
- * Replaces use-feayure-toggle.js in lite builds via webpack alias.
  */
 import {
 	enableReadingGuide,

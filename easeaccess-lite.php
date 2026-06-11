@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:       EaseAccess Lite
-Plugin URI:        https://wordpress.org/plugins/easeaccess-lite/
+Plugin URI:        https://github.com/easeaccess/easeaccess-lite
 Description:       Free Accessibility Widget for WordPress. Adds text adjustments, contrast modes, reading guides, dictionary lookup, big cursor and an accessibility statement generator to your site.
 Version:           1.0.0
 Requires at least: 5.0

@@ -51,9 +51,7 @@ export function getConfiguredDefaultLanguage() {
 	if (typeof window === "undefined") return DEFAULT_LANGUAGE_CODE;
 
 	return normalizeLanguageCode(
-		window.EaseAccessSettings?.default_language ||
-			window.ZN7Settings?.default_language ||
-			DEFAULT_LANGUAGE_CODE,
+		window.EaseAccessLiteSettings?.default_language || DEFAULT_LANGUAGE_CODE,
 	);
 }
 

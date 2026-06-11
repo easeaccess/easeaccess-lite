@@ -131,7 +131,7 @@ class Assets {
         if ( function_exists( 'wp_set_script_translations' ) ) {
             \wp_set_script_translations(
                 'easeaccess-lite-frontend',
-                'easeaccess',
+                'easeaccess-lite',
                 EASEACCESS_LITE_PLUGIN_DIR_PATH . 'languages'
             );
         }
@@ -157,9 +157,6 @@ class Assets {
         \wp_add_inline_style( 'easeaccess-lite-frontend-style', $anti_flicker_css );
 
         // Pass REST API root URL and AJAX URL so the bundled scripts work correctly.
-        // Dual-localize: EaseAccessSettings is the canonical global; ZN7Settings
-        // is kept as an alias so older cached bundles keep working through the
-        // prefix migration.
         $settings_payload = [
             'api_url'          => '/wp-json/easeaccess-lite/v1/widget-settings',
             'rest_url'         => \rest_url(),
@@ -168,8 +165,6 @@ class Assets {
             'nonce'            => \wp_create_nonce( 'wp_rest' ),
         ];
         \wp_localize_script( 'easeaccess-lite-frontend', 'EaseAccessLiteSettings', $settings_payload );
-        // Back-compat alias for any code that still reads the old name.
-        \wp_localize_script( 'easeaccess-lite-frontend', 'ZN7Settings', $settings_payload );
     }
 
     /**
