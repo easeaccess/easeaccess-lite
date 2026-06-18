@@ -40,23 +40,32 @@ const FlagIcon = ({ countryCode, className = "zn:w-4 zn:h-4" }) => {
 
 	const flagCode = getFlagCode(countryCode);
 
-	// Render the flag as a Unicode regional-indicator emoji. This keeps the
-	// plugin self-contained — no remote image requests and no bundled flag
-	// assets. (Where the OS lacks flag glyphs it falls back to the country
-	// letters, which is acceptable.)
-	const toFlagEmoji = (code) =>
-		code
-			.toUpperCase()
-			.replace(/./g, (ch) => String.fromCodePoint(127397 + ch.charCodeAt(0)));
-
+	// Render the country as a small 2-letter code badge. Fully self-contained:
+	// no remote image requests, no bundled flag assets, and no reliance on the
+	// OS/WordPress emoji system (which would otherwise fetch flag glyphs from
+	// s.w.org on platforms lacking native flag emoji).
 	return (
 		<span
 			className={className}
 			role="img"
 			aria-label={`${countryCode} flag`}
-			style={{ display: "inline-flex", alignItems: "center", lineHeight: 1 }}
+			style={{
+				display: "inline-flex",
+				alignItems: "center",
+				justifyContent: "center",
+				minWidth: "1.4em",
+				padding: "0.1em 0.25em",
+				fontSize: "0.7em",
+				fontWeight: 700,
+				lineHeight: 1,
+				letterSpacing: "0.5px",
+				textTransform: "uppercase",
+				borderRadius: "3px",
+				background: "#e5e7eb",
+				color: "#374151",
+			}}
 		>
-			{toFlagEmoji(flagCode)}
+			{flagCode}
 		</span>
 	);
 };
