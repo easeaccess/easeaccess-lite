@@ -40,20 +40,24 @@ const FlagIcon = ({ countryCode, className = "zn:w-4 zn:h-4" }) => {
 
 	const flagCode = getFlagCode(countryCode);
 
+	// Render the flag as a Unicode regional-indicator emoji. This keeps the
+	// plugin self-contained — no remote image requests and no bundled flag
+	// assets. (Where the OS lacks flag glyphs it falls back to the country
+	// letters, which is acceptable.)
+	const toFlagEmoji = (code) =>
+		code
+			.toUpperCase()
+			.replace(/./g, (ch) => String.fromCodePoint(127397 + ch.charCodeAt(0)));
+
 	return (
-		<img
-			src={`https://flagcdn.com/w20/${flagCode}.png`}
-			srcSet={`https://flagcdn.com/w40/${flagCode}.png 2x`}
-			width="28"
-			height="21"
-			alt={`${countryCode} flag`}
+		<span
 			className={className}
-			onError={(e) => {
-				// Fallback to a generic flag icon if image fails to load
-				e.target.style.display = "none";
-				e.target.nextSibling.style.display = "inline-block";
-			}}
-		/>
+			role="img"
+			aria-label={`${countryCode} flag`}
+			style={{ display: "inline-flex", alignItems: "center", lineHeight: 1 }}
+		>
+			{toFlagEmoji(flagCode)}
+		</span>
 	);
 };
 
