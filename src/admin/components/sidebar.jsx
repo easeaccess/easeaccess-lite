@@ -1,4 +1,5 @@
-import { tabs } from "@/constant/data";
+import { menuOrder, proTabs, proTabLabels } from "@/constant/data";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@wordpress/compose";
 import {
@@ -36,9 +37,11 @@ export default function Sidebar({ activeTab, changeTab }) {
 	return (
 		<aside className="zn:flex zn:flex-col zn:w-56 zn:flex-none zn:!border-r zn:!border-gray-200 zn:!bg-white zn:!self-stretch zn:!sticky zn:!top-[78px] zn:!h-[calc(100vh-78px)]">
 			<nav className="zn:flex zn:flex-col zn:gap-1 zn:!p-3">
-				{tabs?.map((tab) => {
-					const Icon = tabIcons[tab];
+				{menuOrder?.map((tab) => {
+					const Icon = tabIcons[tab] || Sparkles;
 					const isActive = activeTab === tab;
+					const isPro = proTabs.includes(tab);
+					const label = isPro ? proTabLabels[tab] : tabLabels[tab] || tab;
 					return (
 						<button
 							key={tab}
@@ -52,7 +55,15 @@ export default function Sidebar({ activeTab, changeTab }) {
 							)}
 						>
 							<Icon className="zn:!w-4 zn:!h-4 zn:flex-none" />
-							<span className="zn:text-left">{tabLabels[tab] || tab}</span>
+							<span className="zn:text-left zn:flex-1">{label}</span>
+							{isPro && (
+								<Badge
+									variant="outline"
+									className="zn:text-[10px] zn:px-1.5 zn:py-0 zn:border-warning zn:text-warning zn:bg-warning-light"
+								>
+									PRO
+								</Badge>
+							)}
 						</button>
 					);
 				})}

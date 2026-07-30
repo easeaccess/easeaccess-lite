@@ -27,7 +27,8 @@ import { toast } from "sonner";
 import AccessiblyContext from "../../context/accessibly-context";
 import { useLicense } from "../../context/license-context";
 import { PREMIUM_FEATURES } from "../../hooks/use-license";
-import { isPremiumFeature } from "@/constant/premium-features";
+import { isPremiumFeature, PRO_FEATURES } from "@/constant/premium-features";
+import ProBadge from "@/admin/components/pro-badge";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AnimatedItem } from "@/motions/animated-item";
@@ -85,7 +86,8 @@ export default function Featurepage() {
 		<div>
 			{/* Main Content */}
 			<div className="zn:grid zn:grid-cols-12 zn:gap-6 zn:relative">
-				<Card className="zn:lg:col-span-7 zn:col-span-12">
+				<div className="zn:lg:col-span-7 zn:col-span-12 zn:space-y-6">
+				<Card>
 					<CardHeader>
 						<CardTitle>Feature Menu</CardTitle>
 						<CardDescription>
@@ -204,6 +206,40 @@ export default function Featurepage() {
 						))}
 					</CardContent>
 				</Card>
+
+				{/* Available in EaseAccess Pro — informational teasers only.
+				    No toggles, no license, and no Pro code ships in Lite. */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="zn:flex zn:items-center zn:gap-2">
+							<Crown className="zn:size-5 zn:text-warning" />
+							Available in EaseAccess Pro
+						</CardTitle>
+						<CardDescription>
+							These advanced accessibility features are part of the separate
+							EaseAccess Pro plugin.
+						</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<div>
+							{PRO_FEATURES.map((feature) => (
+								<div
+									key={feature.key}
+									className="zn:py-4 zn:border-b zn:border-gray-200 last:zn:border-b-0 zn:flex zn:items-center zn:justify-between"
+								>
+									<div className="zn:flex zn:items-center zn:gap-2">
+										<feature.icon className="zn:w-5 zn:h-5 zn:text-gray-400" />
+										<span className="zn:text-sm zn:text-gray-500">
+											{feature.label}
+										</span>
+									</div>
+									<ProBadge />
+								</div>
+							))}
+						</div>
+					</CardContent>
+				</Card>
+				</div>
 
 				{/* Preview Panel */}
 				<div className="zn:lg:col-span-5 zn:col-span-12 zn:lg:block zn:hidden ">

@@ -96,6 +96,9 @@ Build steps:
 2. `npm run build`
 3. The compiled assets land in `/build/`.
 
+Third-party assets:
+* Country flag icons are bundled from the **flag-icons** project (MIT license) — https://github.com/lipis/flag-icons
+
 == Changelog ==
 
 = 1.0.0 =

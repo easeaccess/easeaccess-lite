@@ -212,7 +212,7 @@ export default function GeneralPage() {
 								</div>
 
 								{/* Sheet Option (Pro) */}
-								{__EASEACCESS_PRO__ && (
+								{isPremiumFeature("sheetSidebar") && (
 									<div className="zn:space-y-4">
 										<RadioGroupItem
 											value="sheet"
@@ -247,8 +247,7 @@ export default function GeneralPage() {
 												<span className="zn:text-sm zn:font-medium">
 													Sidebar
 												</span>
-												{__EASEACCESS_PRO__ &&
-													isPremiumFeature("sheetSidebar") &&
+												{isPremiumFeature("sheetSidebar") &&
 													!hasFeature("Sheet Sidebar") && (
 														<HoverCard>
 															<HoverCardTrigger>
@@ -343,7 +342,7 @@ export default function GeneralPage() {
 						</RadioGroup>
 					</div>
 
-					{__EASEACCESS_PRO__ && (
+					{isPremiumFeature("accessibilityProfile") && (
 						<div className="zn:flex zn:items-center zn:justify-between zn:pb-4">
 							<div className="zn:flex zn:items-center zn:gap-2">
 								<LabelTooltip
@@ -534,7 +533,7 @@ export default function GeneralPage() {
 						)}
 					</div>
 
-					{__EASEACCESS_PRO__ && (
+					{isPremiumFeature("openKeyboardShortcuts") && (
 						<div className="zn:flex zn:items-center zn:justify-between zn:pb-4">
 							<div className="zn:flex zn:items-center zn:gap-2">
 								<LabelTooltip

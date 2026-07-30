@@ -8,7 +8,8 @@ import {
 	SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { tabs } from "@/constant/data";
+import { menuOrder, proTabs, proTabLabels } from "@/constant/data";
+import { Badge } from "@/components/ui/badge";
 import {
 	Settings,
 	FileCheck2,
@@ -119,10 +120,13 @@ export default function MobileMenu({ activeTab, changeTab }) {
 							{/* Menu Items — same look as desktop Sidebar */}
 							<div className="zn:!p-3">
 								<nav className="zn:flex zn:flex-col zn:gap-1">
-									{tabs?.map((tab) => {
-										const Icon = tabIcons[tab] || Settings;
+									{menuOrder?.map((tab) => {
+										const Icon = tabIcons[tab] || Sparkles;
 										const isActive = activeTab === tab;
-
+										const isPro = proTabs.includes(tab);
+										const label = isPro
+											? proTabLabels[tab]
+											: tabLabels[tab] || tab;
 										return (
 											<button
 												key={tab}
@@ -136,9 +140,15 @@ export default function MobileMenu({ activeTab, changeTab }) {
 												)}
 											>
 												<Icon className="zn:!w-4 zn:!h-4 zn:flex-none" />
-												<span className="zn:text-left">
-													{tabLabels[tab] || tab}
-												</span>
+												<span className="zn:text-left zn:flex-1">{label}</span>
+												{isPro && (
+													<Badge
+														variant="outline"
+														className="zn:text-[10px] zn:px-1.5 zn:py-0 zn:border-warning zn:text-warning zn:bg-warning-light"
+													>
+														PRO
+													</Badge>
+												)}
 											</button>
 										);
 									})}

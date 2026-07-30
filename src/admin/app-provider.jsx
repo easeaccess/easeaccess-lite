@@ -2,7 +2,7 @@ import { useContext } from "@wordpress/element";
 import "./style.css";
 import "./custom.css";
 import { Toaster } from "../components/ui/sonner";
-import { tabs } from "../constant/data";
+import { tabs, proTabs } from "../constant/data";
 import General from "./pages/general";
 import Customization from "./pages/customization";
 import Featurespage from "./pages/features";
@@ -12,14 +12,17 @@ import Sidebar from "../admin/components/sidebar";
 import { Button } from "../components/ui/button";
 import AccessiblyContext from "../context/accessibly-context";
 import StatementPage from "./pages/statement";
+import ProLockedPage from "./pages/pro-locked";
 import { AnimatedContainer } from "@/motions/animated-container";
 
 export const AppProvider = () => {
 	const [activeTab, changeTab] = usePersistentTab(
 		"zone7-active-tab",
-		tabs,
+		[...tabs, ...proTabs],
 		"general",
 	);
+
+	const isProTab = proTabs.includes(activeTab);
 
 	const { saveSettings, isSaving, hasChanges } = useContext(AccessiblyContext);
 
@@ -34,7 +37,8 @@ export const AppProvider = () => {
 					{activeTab === "customization" && <Customization />}
 					{activeTab === "features" && <Featurespage />}
 					{activeTab === "statement" && <StatementPage />}
-					{activeTab !== "statement" && (
+					{isProTab && <ProLockedPage tab={activeTab} />}
+					{activeTab !== "statement" && !isProTab && (
 						<Button
 							onClick={saveSettings}
 							disabled={isSaving || !hasChanges}
