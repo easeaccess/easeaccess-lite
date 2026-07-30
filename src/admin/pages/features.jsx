@@ -27,8 +27,7 @@ import { toast } from "sonner";
 import AccessiblyContext from "../../context/accessibly-context";
 import { useLicense } from "../../context/license-context";
 import { PREMIUM_FEATURES } from "../../hooks/use-license";
-import { isPremiumFeature, PRO_FEATURES } from "@/constant/premium-features";
-import ProBadge from "@/admin/components/pro-badge";
+import { FEATURE_MENU } from "@/constant/feature-menu";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { AnimatedItem } from "@/motions/animated-item";
@@ -59,6 +58,25 @@ export default function Featurepage() {
 	const enabledFeatures = features
 		.flatMap((category) => category.settings)
 		.filter((f) => f.enabled);
+
+	// Free-feature enabled state lives in the saved `features` (context). The
+	// Features page renders FEATURE_MENU (the full Pro menu) for display, so we
+	// read/write free toggles by key against the context state.
+	const isFeatureEnabled = (key) =>
+		features.some((cat) =>
+			cat.settings.some((s) => s.key === key && s.enabled),
+		);
+
+	const toggleFeature = (key) => {
+		setFeatures(
+			features.map((cat) => ({
+				...cat,
+				settings: cat.settings.map((s) =>
+					s.key === key ? { ...s, enabled: !s.enabled } : s,
+				),
+			})),
+		);
+	};
 
 	const handleResetAll = () => {
 		const updated = features.map((category) => ({
@@ -96,16 +114,15 @@ export default function Featurepage() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="zn:space-y-6">
-						{features.map((category, featureIndex) => (
+						{FEATURE_MENU.map((category, featureIndex) => (
 							<AnimatedItem key={category.title} delay={featureIndex * 0.15}>
 								<div className="zn:text-sm zn:font-semibold zn:mb-2">
 									{category.title}
 								</div>
 								<div className="">
 									{category.settings.map((setting) => {
-										// Check if feature requires license
-										const premium = isPremiumFeature(setting.key);
-										const isLocked = premium && !hasFeature(setting.label);
+										// Pro features are shown as informational teasers only.
+										const isLocked = setting.premium;
 
 										return (
 											<div
@@ -128,7 +145,7 @@ export default function Featurepage() {
 														>
 															{setting.label}
 														</span>
-														{__EASEACCESS_PRO__ && isLocked && (
+														{isLocked && (
 															<HoverCard>
 																<HoverCardTrigger>
 																	<div className="zn:cursor-pointer">
@@ -170,27 +187,14 @@ export default function Featurepage() {
 															</HoverCard>
 														)}
 													</div>
-													<Switch
-														checked={setting.enabled && !isLocked}
-														disabled={__EASEACCESS_PRO__ && isLocked}
-														onCheckedChange={() => {
-															if (__EASEACCESS_PRO__ && isLocked) {
-																toast.error(
-																	"This is a premium feature. Please activate your license to use it.",
-																);
-																return;
+													{!isLocked && (
+														<Switch
+															checked={isFeatureEnabled(setting.key)}
+															onCheckedChange={() =>
+																toggleFeature(setting.key)
 															}
-															const updated = features.map((cat) => ({
-																...cat,
-																settings: cat.settings.map((s) =>
-																	s.key === setting.key
-																		? { ...s, enabled: !s.enabled }
-																		: s,
-																),
-															}));
-															setFeatures(updated);
-														}}
-													/>
+														/>
+													)}
 												</div>
 												{setting.key === "clickSpark" &&
 													setting.enabled &&
@@ -204,39 +208,6 @@ export default function Featurepage() {
 								</div>
 							</AnimatedItem>
 						))}
-					</CardContent>
-				</Card>
-
-				{/* Available in EaseAccess Pro — informational teasers only.
-				    No toggles, no license, and no Pro code ships in Lite. */}
-				<Card>
-					<CardHeader>
-						<CardTitle className="zn:flex zn:items-center zn:gap-2">
-							<Crown className="zn:size-5 zn:text-warning" />
-							Available in EaseAccess Pro
-						</CardTitle>
-						<CardDescription>
-							These advanced accessibility features are part of the separate
-							EaseAccess Pro plugin.
-						</CardDescription>
-					</CardHeader>
-					<CardContent>
-						<div>
-							{PRO_FEATURES.map((feature) => (
-								<div
-									key={feature.key}
-									className="zn:py-4 zn:border-b zn:border-gray-200 last:zn:border-b-0 zn:flex zn:items-center zn:justify-between"
-								>
-									<div className="zn:flex zn:items-center zn:gap-2">
-										<feature.icon className="zn:w-5 zn:h-5 zn:text-gray-400" />
-										<span className="zn:text-sm zn:text-gray-500">
-											{feature.label}
-										</span>
-									</div>
-									<ProBadge />
-								</div>
-							))}
-						</div>
 					</CardContent>
 				</Card>
 				</div>
@@ -419,14 +390,13 @@ export default function Featurepage() {
 											)}
 											{/* Dynamic Feature Groups */}
 											{features.map((category) => {
-												// Get enabled features for this category
+												// Get enabled features for this category. The
+												// context only holds free features, so a plain
+												// enabled check is all that's needed here.
 												const categoryEnabledFeatures =
-													category.settings.filter((setting) => {
-														const premium = isPremiumFeature(setting.key);
-														const isLocked =
-															premium && !hasFeature(setting.label);
-														return setting.enabled && !isLocked;
-													});
+													category.settings.filter(
+														(setting) => setting.enabled,
+													);
 
 												// Skip categories with no enabled features
 												if (categoryEnabledFeatures.length === 0) return null;
